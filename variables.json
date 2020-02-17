@@ -1,0 +1,34 @@
+[   
+    {
+      "ParameterKey": "VPCName",
+      "ParameterValue": "My new VPC DT"
+    },
+    {
+      "ParameterKey": "VPCCidrBlock",
+      "ParameterValue": "172.31.0.0/16"
+    }, 
+    {
+      "ParameterKey": "SubnetCidrBlock1",
+      "ParameterValue": "172.31.0.0/20"
+    },
+    {
+        "ParameterKey": "SubnetCidrBlock2",
+        "ParameterValue": "172.31.16.0/20"
+      },
+      {
+        "ParameterKey": "SubnetCidrBlock3",
+        "ParameterValue": "172.31.32.0/20"
+      },
+      {
+        "ParameterKey": "AvailabilityZone1",
+        "ParameterValue": "us-east-1a"
+      },
+      {
+        "ParameterKey": "AvailabilityZone2",
+        "ParameterValue": "us-east-1b"
+      },
+      {
+        "ParameterKey": "AvailabilityZone3",
+        "ParameterValue": "us-east-1c"
+      }
+  ]
