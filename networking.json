@@ -1,0 +1,169 @@
+
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Launch EC2 - CSYE 6225 Spring 2020",
+    "Parameters": {
+        "VPCName": {"Type": "String"},
+        "VPCCidrBlock": {
+            "Type": "String",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"},
+        "SubnetCidrBlock1": {
+            "Type": "String",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"},
+        "SubnetCidrBlock2": {
+            "Type": "String",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"},
+        "SubnetCidrBlock3": {
+            "Type": "String",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"},
+        "AvailabilityZone1": {"Type": "AWS::EC2::AvailabilityZone::Name"},
+        "AvailabilityZone2": {"Type": "AWS::EC2::AvailabilityZone::Name"},
+        "AvailabilityZone3": {"Type": "AWS::EC2::AvailabilityZone::Name"}
+        
+    },
+    "Resources": {
+        "VPC": {
+			"Type": "AWS::EC2::VPC",
+			"Properties": {
+				"CidrBlock": {
+                    "Ref":"VPCCidrBlock"
+                },
+				"EnableDnsHostnames": true,
+				"EnableDnsSupport": true,
+				"InstanceTenancy": "default",
+                "Tags" : [ {"Key" : "Name", "Value" : {
+                    "Ref": "VPCName"
+                }} ]
+			}
+		},
+        "InternetGateway":{
+            "Type": "AWS::EC2::InternetGateway"
+        },
+        "VPCGatewayAttachment": {
+			"Type": "AWS::EC2::VPCGatewayAttachment",
+			"Properties": {
+				"VpcId": {
+                    "Ref": "VPC"
+                },
+				"InternetGatewayId": {
+                    "Ref" : "InternetGateway"
+                }
+			}
+		},
+        "SubnetA": {
+			"Type": "AWS::EC2::Subnet",
+			"Properties": {
+				"AvailabilityZone": {
+                    "Ref":"AvailabilityZone1"
+                },
+				"VpcId": {
+                    "Ref": "VPC"
+                },
+                "CidrBlock": {
+                    "Ref": "SubnetCidrBlock1"
+                },
+				"MapPublicIpOnLaunch": true
+			}
+		},
+		"SubnetB": {
+			"Type": "AWS::EC2::Subnet",
+			"Properties": {
+				"AvailabilityZone": {
+                    "Ref":"AvailabilityZone2"
+                },
+				"VpcId": {
+                    "Ref": "VPC"
+                },
+                "CidrBlock": {
+                    "Ref": "SubnetCidrBlock2"
+                },
+				"MapPublicIpOnLaunch": true
+			}
+		},
+		"SubnetC": {
+			"Type": "AWS::EC2::Subnet",
+			"Properties": {
+				"AvailabilityZone": {
+                    "Ref":"AvailabilityZone3"
+                    },
+				"VpcId": {
+                    "Ref": "VPC"
+                },
+				"CidrBlock": {
+                    "Ref": "SubnetCidrBlock3"
+                },
+				"MapPublicIpOnLaunch": true
+			}
+		}, 
+        "RouteTable": {
+			"Type": "AWS::EC2::RouteTable",
+			"Properties": {
+				"VpcId": {
+                    "Ref": "VPC"
+                }
+			}
+		},
+        "InternetRoute": {
+			"Type": "AWS::EC2::Route",
+			"DependsOn": "VPCGatewayAttachment",
+			"Properties": {
+				"DestinationCidrBlock": "0.0.0.0/0",
+				"GatewayId": {
+                    "Ref":"InternetGateway"
+                },
+				"RouteTableId": {
+                    "Ref": "RouteTable"
+                }
+			}
+		},
+        "SubnetARouteTableAssociation": {
+			"Type": "AWS::EC2::SubnetRouteTableAssociation",
+			"Properties": {
+				"RouteTableId": {
+                    "Ref":"RouteTable"
+                },
+				"SubnetId": {
+                    "Ref":"SubnetA"
+                }
+			}
+		},
+		"SubnetBRouteTableAssociation": {
+			"Type": "AWS::EC2::SubnetRouteTableAssociation",
+			"Properties": {
+				"RouteTableId": {
+                    "Ref":"RouteTable"
+                },
+				"SubnetId": {
+                    "Ref":"SubnetB"
+                }
+			}
+		},
+		"SubnetCRouteTableAssociation": {
+			"Type": "AWS::EC2::SubnetRouteTableAssociation",
+			"Properties": {
+				"RouteTableId": {
+                    "Ref":"RouteTable"
+                },
+				"SubnetId": {
+                    "Ref":"SubnetC"
+                }
+			}
+		}
+
+    },
+    "Outputs": {
+        "VPCId": {
+          "Description": "Newly Created VPC",
+          "Value": {
+            "Ref": "VPC"
+          }
+        },
+        "InternetGateway":{
+            "Description": "Internet Gateway Associated",
+            "Value": {
+              "Ref": "InternetGateway"
+            }
+          }
+    
+        }    
+}
