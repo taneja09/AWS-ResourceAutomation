@@ -1,22 +1,22 @@
 [   
     {
       "ParameterKey": "VPCName",
-      "ParameterValue": "CloudFormationInfra"
+      "ParameterValue": ""
     },
     {
       "ParameterKey": "VPCCidrBlock",
-      "ParameterValue": "172.31.0.0/16"
+      "ParameterValue": ""
     }, 
     {
       "ParameterKey": "SubnetCidrBlock1",
-      "ParameterValue": "172.31.0.0/20"
+      "ParameterValue": ""
     },
     {
         "ParameterKey": "SubnetCidrBlock2",
-        "ParameterValue": "172.31.16.0/20"
+        "ParameterValue": ""
       },
       {
         "ParameterKey": "SubnetCidrBlock3",
-        "ParameterValue": "172.31.32.0/20"
+        "ParameterValue": ""
       }
   ]
