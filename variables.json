@@ -1,7 +1,7 @@
 [   
     {
       "ParameterKey": "VPCName",
-      "ParameterValue": "My new VPC DT"
+      "ParameterValue": "CloudFormationInfra"
     },
     {
       "ParameterKey": "VPCCidrBlock",
@@ -18,17 +18,5 @@
       {
         "ParameterKey": "SubnetCidrBlock3",
         "ParameterValue": "172.31.32.0/20"
-      },
-      {
-        "ParameterKey": "AvailabilityZone1",
-        "ParameterValue": "us-east-1a"
-      },
-      {
-        "ParameterKey": "AvailabilityZone2",
-        "ParameterValue": "us-east-1b"
-      },
-      {
-        "ParameterKey": "AvailabilityZone3",
-        "ParameterValue": "us-east-1c"
       }
   ]
