@@ -9,18 +9,35 @@
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
        },
-       "SubnetCidrBlock1":{
+       "PubSubnetCidrBlock1":{
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
        },
-       "SubnetCidrBlock2":{
+       "PubSubnetCidrBlock2":{
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
        },
-       "SubnetCidrBlock3":{
+       "PubSubnetCidrBlock3":{
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-       }
+       },
+       "PrivateSubnetCidrBlock4":{
+         "Type":"String",
+         "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+       },
+       "PrivateSubnetCidrBlock5":{
+         "Type":"String",
+         "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+       },
+       "EC2InstanceVol":{
+         "Type":"String"
+      },
+      "RDSInstanceVol":{
+         "Type":"String"
+      },
+      "RDSPublicAccessibility":{
+         "Type":"String"
+      }
     },
     "Resources":{
        "VPC":{
@@ -73,7 +90,7 @@
                 "Ref":"VPC"
              },
              "CidrBlock":{
-                "Ref":"SubnetCidrBlock1"
+                "Ref":"PubSubnetCidrBlock1"
              },
              "MapPublicIpOnLaunch":true
           }
@@ -95,7 +112,7 @@
                 "Ref":"VPC"
              },
              "CidrBlock":{
-                "Ref":"SubnetCidrBlock2"
+                "Ref":"PubSubnetCidrBlock2"
              },
              "MapPublicIpOnLaunch":true
           }
@@ -117,7 +134,7 @@
                 "Ref":"VPC"
              },
              "CidrBlock":{
-                "Ref":"SubnetCidrBlock3"
+                "Ref":"PubSubnetCidrBlock3"
              },
              "MapPublicIpOnLaunch":true
           }
@@ -138,7 +155,9 @@
              "VpcId":{
                 "Ref":"VPC"
              },
-             "CidrBlock":"172.31.64.0/20",
+             "CidrBlock":{
+               "Ref":"PrivateSubnetCidrBlock4"
+            },
              "MapPublicIpOnLaunch":false
           }
        },
@@ -158,7 +177,9 @@
              "VpcId":{
                 "Ref":"VPC"
              },
-             "CidrBlock":"172.31.128.0/20",
+             "CidrBlock":{
+               "Ref":"PrivateSubnetCidrBlock5"
+            },
              "MapPublicIpOnLaunch":false
           }
        },
@@ -409,7 +430,9 @@
                    "DeviceName":"/dev/sda1",
                    "Ebs":{
                       "DeleteOnTermination":"true",
-                      "VolumeSize":"20",
+                      "VolumeSize":{
+                         "Ref":"EC2InstanceVol"
+                      },
                       "VolumeType":"gp2"
                    }
                 }
@@ -437,7 +460,8 @@
                          "echo 'export NODE_ENV=\"test\"' >> myvariables.sh\n",
                          "echo 'export MYSQL_PORT=\"3306\"' >> myvariables.sh\n",
                          "sudo chmod +x myvariables.sh\n",
-                         "sudo cp myvariables.sh /etc/profile.d/myvariables.sh\n"
+                         "sudo cp myvariables.sh /etc/profile.d/myvariables.sh\n",
+                         "sudo apt install unzip\n"
                       ]
                    ]
                 }
@@ -461,7 +485,7 @@
              "Tags":[
                 {
                    "Key":"Name",
-                   "Value":"RDSSubnet"
+                   "Value":"RDSSubnetGroup"
                 }
              ]
           }
@@ -469,7 +493,9 @@
        "RDSInstance":{
           "Type":"AWS::RDS::DBInstance",
           "Properties":{
-             "AllocatedStorage":"10",
+             "AllocatedStorage":{
+                "Ref":"RDSInstanceVol"
+             },
              "DBInstanceClass":"db.t3.micro",
              "DBInstanceIdentifier":"csye6225-spring2020",
              "VPCSecurityGroups":[
@@ -482,7 +508,9 @@
              "EngineVersion":"8.0.16",
              "MasterUsername":"dbuser",
              "MasterUserPassword":"Divinity0818",
-             "PubliclyAccessible":"true",
+             "PubliclyAccessible":{
+                "Ref":"RDSPublicAccessibility"
+             },
              "DBName":"csye6225",
              "DBSubnetGroupName":{
                 "Ref":"DBSubnetGroup"

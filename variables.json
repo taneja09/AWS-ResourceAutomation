@@ -1,23 +1,42 @@
-
 [
   {
-  "ParameterKey": "VPCName",
-  "ParameterValue": "CloudFormationInfra"
+    "ParameterKey": "VPCName",
+    "ParameterValue": "CloudFormationInfra"
   },
   {
-  "ParameterKey": "VPCCidrBlock",
-  "ParameterValue": "172.31.0.0/16"
+    "ParameterKey": "VPCCidrBlock",
+    "ParameterValue": "172.31.0.0/16"
   },
   {
-  "ParameterKey": "SubnetCidrBlock1",
-  "ParameterValue": "172.31.0.0/20"
+    "ParameterKey": "PubSubnetCidrBlock1",
+    "ParameterValue": "172.31.0.0/20"
   },
   {
-  "ParameterKey": "SubnetCidrBlock2",
-  "ParameterValue": "172.31.16.0/20"
+    "ParameterKey": "PubSubnetCidrBlock2",
+    "ParameterValue": "172.31.16.0/20"
   },
   {
-  "ParameterKey": "SubnetCidrBlock3",
-  "ParameterValue": "172.31.32.0/20"
+    "ParameterKey": "PubSubnetCidrBlock3",
+    "ParameterValue": "172.31.32.0/20"
+  },
+  {
+    "ParameterKey": "PrivateSubnetCidrBlock4",
+    "ParameterValue": "172.31.64.0/20"
+  },
+  {
+    "ParameterKey": "PrivateSubnetCidrBlock5",
+    "ParameterValue": "172.31.128.0/20"
+  },
+  {
+    "ParameterKey": "EC2InstanceVol",
+    "ParameterValue": "20"
+  },
+  {
+    "ParameterKey": "RDSInstanceVol",
+    "ParameterValue": "10"
+  },
+  {
+    "ParameterKey": "RDSPublicAccessibility",
+    "ParameterValue": "true"
   }
-  ] 
+]
