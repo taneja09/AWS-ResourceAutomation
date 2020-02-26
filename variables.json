@@ -20,14 +20,6 @@
   "ParameterValue": "172.31.32.0/20"
   },
   {
-  "ParameterKey": "PrivateSubnetCidrBlock4",
-  "ParameterValue": "172.31.64.0/20"
-  },
-  {
-  "ParameterKey": "PrivateSubnetCidrBlock5",
-  "ParameterValue": "172.31.128.0/20"
-  },
-  {
   "ParameterKey": "EC2InstanceVol",
   "ParameterValue": "20"
   },
