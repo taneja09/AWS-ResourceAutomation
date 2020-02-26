@@ -37,6 +37,24 @@
       },
       "RDSPublicAccessibility":{
          "Type":"String"
+      },
+      "DBUsername":{
+         "Type":"String"
+      },
+      "DBPassword":{
+         "Type":"String"
+      },
+      "RDSDBName":{
+         "Type":"String"
+      },
+      "DBInstanceId":{
+         "Type":"String"
+      },
+      "EC2IamRole":{
+         "Type":"String"
+      },
+      "EC2IamPolicy":{
+         "Type":"String"
       }
     },
     "Resources":{
@@ -338,9 +356,14 @@
              "LifecycleConfiguration":{
                 "Rules":[
                    {
-                      "ExpirationInDays":"30",
                       "Id":"MoveToAIAfter30Days",
-                      "Status":"Enabled"
+                      "Status":"Enabled",
+                      "Transitions":[
+                         {
+                           "StorageClass" : "STANDARD_IA",
+                           "TransitionInDays": "30"
+                         }
+                      ]
                    }
                 ]
              }
@@ -349,7 +372,9 @@
        "IamPolicy":{
           "Type":"AWS::IAM::Policy",
           "Properties":{
-            "PolicyName":"webappS3",
+            "PolicyName":{
+               "Ref":"EC2IamPolicy"
+            },
              "PolicyDocument": {
              "Version": "2012-10-17",
              "Statement":[
@@ -387,7 +412,9 @@
                     ]
                 },
              "Description":"Iam Role for EC2 instance with S3 Bucket Policy attached",
-             "RoleName":"EC2-CSYE6225"
+             "RoleName":{
+                "Ref":"EC2IamRole"
+             }
           }
        },
 
@@ -450,9 +477,6 @@
                          {"Fn::Join": ["",
                               ["echo ","'", "export MYSQL_HOST=","\"",{"Fn::GetAtt": ["RDSInstance","Endpoint.Address"]},"\"","'"," >> myvariables.sh \n" ]]
                           },
-                          {
-                            "Fn::Join": ["",["echo ","'", "export ARN=","\"","arn:aws:sns:us-east-1:","358073346779",":password_reset","\"","'"," >> myvariables.sh \n"]]
-                          },
                           {"Fn::Join": ["",
                             ["echo ","'", "export BucketName=","\"",{"Ref": "S3Bucket"},"\"","'"," >> myvariables.sh \n"]]
                           },
@@ -497,7 +521,9 @@
                 "Ref":"RDSInstanceVol"
              },
              "DBInstanceClass":"db.t3.micro",
-             "DBInstanceIdentifier":"csye6225-spring2020",
+             "DBInstanceIdentifier":{
+                "Ref":"DBInstanceId"
+             },
              "VPCSecurityGroups":[
                 {
                    "Ref":"RDSInstanceSecurityGroup"
@@ -506,12 +532,18 @@
              "MultiAZ":"false",
              "Engine":"MySQL",
              "EngineVersion":"8.0.16",
-             "MasterUsername":"dbuser",
-             "MasterUserPassword":"Divinity0818",
+             "MasterUsername":{
+                "Ref":"DBUsername"
+             },
+             "MasterUserPassword":{
+                "Ref":"DBPassword"
+             },
              "PubliclyAccessible":{
                 "Ref":"RDSPublicAccessibility"
              },
-             "DBName":"csye6225",
+             "DBName":{
+                "Ref": "RDSDBName"
+             },
              "DBSubnetGroupName":{
                 "Ref":"DBSubnetGroup"
              }
