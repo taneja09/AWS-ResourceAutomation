@@ -1,22 +1,67 @@
-[   
-    {
-      "ParameterKey": "VPCName",
-      "ParameterValue": ""
-    },
-    {
-      "ParameterKey": "VPCCidrBlock",
-      "ParameterValue": ""
-    }, 
-    {
-      "ParameterKey": "SubnetCidrBlock1",
-      "ParameterValue": ""
-    },
-    {
-        "ParameterKey": "SubnetCidrBlock2",
-        "ParameterValue": ""
-      },
-      {
-        "ParameterKey": "SubnetCidrBlock3",
-        "ParameterValue": ""
-      }
+[
+  {
+  "ParameterKey": "VPCName",
+  "ParameterValue": "CloudFormationInfra"
+  },
+  {
+  "ParameterKey": "VPCCidrBlock",
+  "ParameterValue": "172.31.0.0/16"
+  },
+  {
+  "ParameterKey": "PubSubnetCidrBlock1",
+  "ParameterValue": "172.31.0.0/20"
+  },
+  {
+  "ParameterKey": "PubSubnetCidrBlock2",
+  "ParameterValue": "172.31.16.0/20"
+  },
+  {
+  "ParameterKey": "PubSubnetCidrBlock3",
+  "ParameterValue": "172.31.32.0/20"
+  },
+  {
+  "ParameterKey": "PrivateSubnetCidrBlock4",
+  "ParameterValue": "172.31.64.0/20"
+  },
+  {
+  "ParameterKey": "PrivateSubnetCidrBlock5",
+  "ParameterValue": "172.31.128.0/20"
+  },
+  {
+  "ParameterKey": "EC2InstanceVol",
+  "ParameterValue": "20"
+  },
+  {
+  "ParameterKey": "RDSInstanceVol",
+  "ParameterValue": "10"
+  },
+  {
+  "ParameterKey": "RDSPublicAccessibility",
+  "ParameterValue": "true"
+  },
+  {
+    "ParameterKey": "DBUsername",
+    "ParameterValue": "dbuser"
+  },
+  {
+    "ParameterKey": "DBPassword",
+    "ParameterValue": "Divinity0818"
+  },
+  {
+    "ParameterKey": "RDSDBName",
+    "ParameterValue": "csye6225"
+  },
+  {
+    "ParameterKey": "DBInstanceId",
+    "ParameterValue": "csye6225-spring2020"
+  },
+  {
+    "ParameterKey": "EC2IamRole",
+    "ParameterValue": "EC2-CSYE6225"
+
+  },
+  {
+    "ParameterKey": "EC2IamPolicy",
+    "ParameterValue": "webappS3"
+  }
   ]
