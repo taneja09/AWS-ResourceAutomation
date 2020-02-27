@@ -21,14 +21,6 @@
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
        },
-       "PrivateSubnetCidrBlock4":{
-         "Type":"String",
-         "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-       },
-       "PrivateSubnetCidrBlock5":{
-         "Type":"String",
-         "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-       },
        "EC2InstanceVol":{
          "Type":"String"
       },
@@ -54,6 +46,9 @@
          "Type":"String"
       },
       "EC2IamPolicy":{
+         "Type":"String"
+      },
+      "AMIImage":{
          "Type":"String"
       }
     },
@@ -113,7 +108,7 @@
              "MapPublicIpOnLaunch":true
           }
        },
-       "PublicSubnetB":{
+       "PrivateSubnetB":{
           "Type":"AWS::EC2::Subnet",
           "Properties":{
              "AvailabilityZone":{
@@ -132,10 +127,10 @@
              "CidrBlock":{
                 "Ref":"PubSubnetCidrBlock2"
              },
-             "MapPublicIpOnLaunch":true
+             "MapPublicIpOnLaunch":false
           }
        },
-       "PublicSubnetC":{
+       "PrivateSubnetC":{
           "Type":"AWS::EC2::Subnet",
           "Properties":{
              "AvailabilityZone":{
@@ -154,50 +149,6 @@
              "CidrBlock":{
                 "Ref":"PubSubnetCidrBlock3"
              },
-             "MapPublicIpOnLaunch":true
-          }
-       },
-       "PrivateSubnetD":{
-          "Type":"AWS::EC2::Subnet",
-          "Properties":{
-             "AvailabilityZone":{
-                "Fn::Select":[
-                   3,
-                   {
-                      "Fn::GetAZs":{
-                         "Ref":"AWS::Region"
-                      }
-                   }
-                ]
-             },
-             "VpcId":{
-                "Ref":"VPC"
-             },
-             "CidrBlock":{
-               "Ref":"PrivateSubnetCidrBlock4"
-            },
-             "MapPublicIpOnLaunch":false
-          }
-       },
-       "PrivateSubnetE":{
-          "Type":"AWS::EC2::Subnet",
-          "Properties":{
-             "AvailabilityZone":{
-                "Fn::Select":[
-                   4,
-                   {
-                      "Fn::GetAZs":{
-                         "Ref":"AWS::Region"
-                      }
-                   }
-                ]
-             },
-             "VpcId":{
-                "Ref":"VPC"
-             },
-             "CidrBlock":{
-               "Ref":"PrivateSubnetCidrBlock5"
-            },
              "MapPublicIpOnLaunch":false
           }
        },
@@ -245,10 +196,10 @@
           "Type":"AWS::EC2::SubnetRouteTableAssociation",
           "Properties":{
              "RouteTableId":{
-                "Ref":"RouteTable"
+                "Ref":"PrivateRouteTable"
              },
              "SubnetId":{
-                "Ref":"PublicSubnetB"
+                "Ref":"PrivateSubnetB"
              }
           }
        },
@@ -256,32 +207,10 @@
           "Type":"AWS::EC2::SubnetRouteTableAssociation",
           "Properties":{
              "RouteTableId":{
-                "Ref":"RouteTable"
-             },
-             "SubnetId":{
-                "Ref":"PublicSubnetC"
-             }
-          }
-       },
-       "SubnetDRouteTableAssociation":{
-          "Type":"AWS::EC2::SubnetRouteTableAssociation",
-          "Properties":{
-             "RouteTableId":{
                 "Ref":"PrivateRouteTable"
              },
              "SubnetId":{
-                "Ref":"PrivateSubnetD"
-             }
-          }
-       },
-       "SubnetERouteTableAssociation":{
-          "Type":"AWS::EC2::SubnetRouteTableAssociation",
-          "Properties":{
-             "RouteTableId":{
-                "Ref":"PrivateRouteTable"
-             },
-             "SubnetId":{
-                "Ref":"PrivateSubnetE"
+                "Ref":"PrivateSubnetC"
              }
           }
        },
@@ -344,6 +273,7 @@
        "S3Bucket":{
           "Type":"AWS::S3::Bucket",
           "Properties":{
+             "AccessControl": "Private",
              "BucketEncryption":{
                 "ServerSideEncryptionConfiguration": [
                     {
@@ -379,7 +309,7 @@
              "Version": "2012-10-17",
              "Statement":[
                 {
-                   "Action":["s3:*"],
+                   "Action":["s3:Get*","s3:Put*","s3:Delete*"],
                    "Effect":"Allow",
                    "Resource":[
                       {"Fn::Join":["",["arn:aws:s3:::",{"Ref":"S3Bucket"}]]},
@@ -432,7 +362,9 @@
        "EC2Instance":{
           "Type":"AWS::EC2::Instance",
           "Properties":{
-             "ImageId":"ami-0ee9786ac99639b64",
+             "ImageId":{
+                "Ref":"AMIImage"
+             },
              "InstanceType":"t2.micro",
              "SecurityGroupIds":[
                 {
@@ -471,15 +403,21 @@
                       [  
                          "#!/bin/bash -xe \n",
                          "echo '#!/bin/sh' >> myvariables.sh \n",
-                         "echo 'export MYSQL_USERNAME=\"dbuser\"' >> myvariables.sh\n",
-                         "echo 'export MYSQL_ROOT_PASSWORD=\"Divinity0818\"' >> myvariables.sh \n",
-                         "echo 'export MYSQL_DATABASE=\"csye6225\"' >> myvariables.sh\n",
-                         {"Fn::Join": ["",
+                        {"Fn::Join": ["",
+                           ["echo ","'", "export MYSQL_USERNAME=","\"",{"Ref": "DBUsername"},"\"","'"," >> myvariables.sh \n" ]]
+                        },
+                        {"Fn::Join": ["",
+                        ["echo ","'", "export MYSQL_ROOT_PASSWORD=","\"",{"Ref":"DBPassword"},"\"","'"," >> myvariables.sh \n" ]]
+                        },
+                        {"Fn::Join": ["",
+                           ["echo ","'", "export MYSQL_DATABASE=","\"",{"Ref":"RDSDBName"},"\"","'"," >> myvariables.sh \n" ]]
+                        },
+                        {"Fn::Join": ["",
                               ["echo ","'", "export MYSQL_HOST=","\"",{"Fn::GetAtt": ["RDSInstance","Endpoint.Address"]},"\"","'"," >> myvariables.sh \n" ]]
-                          },
-                          {"Fn::Join": ["",
+                        },
+                        {"Fn::Join": ["",
                             ["echo ","'", "export BucketName=","\"",{"Ref": "S3Bucket"},"\"","'"," >> myvariables.sh \n"]]
-                          },
+                        },
                          "echo 'export MYSQL_DIALECT=\"mysql\"' >> myvariables.sh\n",
                          "echo 'export NODE_ENV=\"test\"' >> myvariables.sh\n",
                          "echo 'export MYSQL_PORT=\"3306\"' >> myvariables.sh\n",
@@ -500,10 +438,10 @@
              "DBSubnetGroupName":"RDSSubnetGroup",
              "SubnetIds":[
                 {
-                   "Ref":"PrivateSubnetD"
+                   "Ref":"PrivateSubnetB"
                 },
                 {
-                   "Ref":"PrivateSubnetE"
+                   "Ref":"PrivateSubnetC"
                 }
              ],
              "Tags":[
@@ -551,12 +489,18 @@
        }
     },
     "Outputs":{
-       "VPCId":{
+       "VPC":{
           "Description":"Newly Created VPC",
           "Value":{
              "Ref":"VPC"
           }
        },
+      "RDS":{
+         "Description":"Newly Created VPC",
+         "Value":{
+            "Ref":"RDSInstance"
+         }  
+      },
        "InternetGateway":{
           "Description":"Internet Gateway Associated",
           "Value":{
