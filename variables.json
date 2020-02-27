@@ -1,59 +1,63 @@
 [
   {
   "ParameterKey": "VPCName",
-  "ParameterValue": "CloudFormationInfra"
+  "ParameterValue": ""
   },
   {
   "ParameterKey": "VPCCidrBlock",
-  "ParameterValue": "172.31.0.0/16"
+  "ParameterValue": ""
   },
   {
   "ParameterKey": "PubSubnetCidrBlock1",
-  "ParameterValue": "172.31.0.0/20"
+  "ParameterValue": ""
   },
   {
   "ParameterKey": "PubSubnetCidrBlock2",
-  "ParameterValue": "172.31.16.0/20"
+  "ParameterValue": ""
   },
   {
   "ParameterKey": "PubSubnetCidrBlock3",
-  "ParameterValue": "172.31.32.0/20"
+  "ParameterValue": ""
   },
   {
   "ParameterKey": "EC2InstanceVol",
-  "ParameterValue": "20"
+  "ParameterValue": ""
   },
   {
   "ParameterKey": "RDSInstanceVol",
-  "ParameterValue": "10"
+  "ParameterValue": ""
   },
   {
   "ParameterKey": "RDSPublicAccessibility",
-  "ParameterValue": "true"
+  "ParameterValue": ""
   },
   {
     "ParameterKey": "DBUsername",
-    "ParameterValue": "dbuser"
+    "ParameterValue": ""
   },
   {
     "ParameterKey": "DBPassword",
-    "ParameterValue": "Divinity0818"
+    "ParameterValue": ""
   },
   {
     "ParameterKey": "RDSDBName",
-    "ParameterValue": "csye6225"
+    "ParameterValue": ""
   },
   {
     "ParameterKey": "DBInstanceId",
-    "ParameterValue": "csye6225-spring2020"
+    "ParameterValue": ""
   },
   {
     "ParameterKey": "EC2IamRole",
-    "ParameterValue": "EC2-CSYE6225"
+    "ParameterValue": ""
 
   },
   {
     "ParameterKey": "EC2IamPolicy",
-    "ParameterValue": "webappS3"
+    "ParameterValue": ""
+  },
+  {
+  "ParameterKey": "AMIImage",
+  "ParameterValue":""
   }
   ]

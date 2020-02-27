@@ -47,6 +47,9 @@
       },
       "EC2IamPolicy":{
          "Type":"String"
+      },
+      "AMIImage":{
+         "Type":"String"
       }
     },
     "Resources":{
@@ -270,6 +273,7 @@
        "S3Bucket":{
           "Type":"AWS::S3::Bucket",
           "Properties":{
+             "AccessControl": "Private",
              "BucketEncryption":{
                 "ServerSideEncryptionConfiguration": [
                     {
@@ -358,7 +362,9 @@
        "EC2Instance":{
           "Type":"AWS::EC2::Instance",
           "Properties":{
-             "ImageId":"ami-035c162e587bb331b",
+             "ImageId":{
+                "Ref":"AMIImage"
+             },
              "InstanceType":"t2.micro",
              "SecurityGroupIds":[
                 {
@@ -406,12 +412,12 @@
                         {"Fn::Join": ["",
                            ["echo ","'", "export MYSQL_DATABASE=","\"",{"Ref":"RDSDBName"},"\"","'"," >> myvariables.sh \n" ]]
                         },
-                         {"Fn::Join": ["",
+                        {"Fn::Join": ["",
                               ["echo ","'", "export MYSQL_HOST=","\"",{"Fn::GetAtt": ["RDSInstance","Endpoint.Address"]},"\"","'"," >> myvariables.sh \n" ]]
-                          },
-                          {"Fn::Join": ["",
+                        },
+                        {"Fn::Join": ["",
                             ["echo ","'", "export BucketName=","\"",{"Ref": "S3Bucket"},"\"","'"," >> myvariables.sh \n"]]
-                          },
+                        },
                          "echo 'export MYSQL_DIALECT=\"mysql\"' >> myvariables.sh\n",
                          "echo 'export NODE_ENV=\"test\"' >> myvariables.sh\n",
                          "echo 'export MYSQL_PORT=\"3306\"' >> myvariables.sh\n",
