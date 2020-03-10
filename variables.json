@@ -57,7 +57,7 @@
   },
   {
   "ParameterKey": "AMIImage",
-  "ParameterValue":"ami-03669dedcb9de0cb8"
+  "ParameterValue":"ami-0cfe07ea30fc01598"
   },
   {
     "ParameterKey": "CDEC2ReadS3",
