@@ -2,26 +2,26 @@
     "AWSTemplateFormatVersion":"2010-09-09",
     "Description":"Launch EC2 - CSYE 6225 Spring 2020",
     "Parameters":{
-       "VPCName":{
+      "VPCName":{
           "Type":"String"
-       },
-       "VPCCidrBlock":{
+      },
+      "VPCCidrBlock":{
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-       },
-       "PubSubnetCidrBlock1":{
+      },
+      "PubSubnetCidrBlock1":{
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-       },
-       "PubSubnetCidrBlock2":{
+      },
+      "PubSubnetCidrBlock2":{
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-       },
-       "PubSubnetCidrBlock3":{
+      },
+      "PubSubnetCidrBlock3":{
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-       },
-       "EC2InstanceVol":{
+      },
+      "EC2InstanceVol":{
          "Type":"String"
       },
       "RDSInstanceVol":{
@@ -49,6 +49,36 @@
          "Type":"String"
       },
       "AMIImage":{
+         "Type":"String"
+      },
+      "CDEC2ReadS3":{
+         "Type":"String"
+      },
+      "CCIUploadS3":{
+         "Type":"String"
+      },
+      "CCICodeDeploy":{
+         "Type":"String"
+      },
+      "AWSAccountID":{
+         "Type":"String"
+      },
+      "CodeDeployBucket":{
+         "Type":"String"
+      },
+      "EC2CodeDeployRole":{
+         "Type":"String"
+      },
+      "ServiceCodeDeployRole":{
+         "Type":"String"
+      },
+      "CodeDeployAppName":{
+         "Type":"String"
+      },
+      "CodeDeployGroupName":{
+         "Type":"String"
+      },
+      "CodeDeployS3Bucket":{
          "Type":"String"
       }
     },
@@ -300,9 +330,9 @@
           }
        },
        "IamPolicy":{
-          "Type":"AWS::IAM::Policy",
+          "Type":"AWS::IAM::ManagedPolicy",
           "Properties":{
-            "PolicyName":{
+            "ManagedPolicyName":{
                "Ref":"EC2IamPolicy"
             },
              "PolicyDocument": {
@@ -317,44 +347,16 @@
                    ]
                 }
              ]
-            },
-            "Roles": [ {
-                "Ref": "IamRole"
-             } ]
+            }
           }
        },
-       "IamRole":{
-          "Type":"AWS::IAM::Role",
-          "Properties":{
-             "AssumeRolePolicyDocument":
-                {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                        {
-                            "Effect": "Allow",
-                            "Principal": {
-                                "Service": [
-                                    "ec2.amazonaws.com"
-                                ]
-                            },
-                            "Action": ["sts:AssumeRole"]
-                        }
-                    ]
-                },
-             "Description":"Iam Role for EC2 instance with S3 Bucket Policy attached",
-             "RoleName":{
-                "Ref":"EC2IamRole"
-             }
-          }
-       },
-
        "EC2InstanceProfile": {
         "Type": "AWS::IAM::InstanceProfile",
         "Properties": {
             "Path": "/",
             "Roles": [
                 {
-                    "Ref": "IamRole"
+                    "Ref": "CodeDeployIamRole"
                 }
             ]
         }
@@ -401,28 +403,27 @@
                    "Fn::Join":[
                       "",
                       [  
-                         "#!/bin/bash -xe \n",
-                         "echo '#!/bin/sh' >> myvariables.sh \n",
+                        "#!/bin/bash -xe \n",
+                        "echo '#!/bin/sh' >> myvariables.sh \n",
+                        "cd /home/ubuntu \n",
                         {"Fn::Join": ["",
-                           ["echo ","'", "export MYSQL_USERNAME=","\"",{"Ref": "DBUsername"},"\"","'"," >> myvariables.sh \n" ]]
+                           ["sudo echo ","'", "export MYSQL_USERNAME=","\"",{"Ref": "DBUsername"},"\"","'"," >> /etc/environment \n" ]]
                         },
                         {"Fn::Join": ["",
-                        ["echo ","'", "export MYSQL_ROOT_PASSWORD=","\"",{"Ref":"DBPassword"},"\"","'"," >> myvariables.sh \n" ]]
+                        ["sudo echo ","'", "export MYSQL_ROOT_PASSWORD=","\"",{"Ref":"DBPassword"},"\"","'"," >> /etc/environment \n" ]]
                         },
                         {"Fn::Join": ["",
-                           ["echo ","'", "export MYSQL_DATABASE=","\"",{"Ref":"RDSDBName"},"\"","'"," >> myvariables.sh \n" ]]
+                           ["sudo echo ","'", "export MYSQL_DATABASE=","\"",{"Ref":"RDSDBName"},"\"","'"," >> /etc/environment \n" ]]
                         },
                         {"Fn::Join": ["",
-                              ["echo ","'", "export MYSQL_HOST=","\"",{"Fn::GetAtt": ["RDSInstance","Endpoint.Address"]},"\"","'"," >> myvariables.sh \n" ]]
+                              ["sudo echo ","'", "export MYSQL_HOST=","\"",{"Fn::GetAtt": ["RDSInstance","Endpoint.Address"]},"\"","'"," >> /etc/environment \n" ]]
                         },
                         {"Fn::Join": ["",
-                            ["echo ","'", "export BucketName=","\"",{"Ref": "S3Bucket"},"\"","'"," >> myvariables.sh \n"]]
+                            ["sudo echo ","'", "export BucketName=","\"",{"Ref": "S3Bucket"},"\"","'"," >> /etc/environment \n"]]
                         },
-                         "echo 'export MYSQL_DIALECT=\"mysql\"' >> myvariables.sh\n",
-                         "echo 'export NODE_ENV=\"test\"' >> myvariables.sh\n",
-                         "echo 'export MYSQL_PORT=\"3306\"' >> myvariables.sh\n",
-                         "sudo chmod +x myvariables.sh\n",
-                         "sudo cp myvariables.sh /etc/profile.d/myvariables.sh\n",
+                         "sudo echo 'export MYSQL_DIALECT=\"mysql\"' >> /etc/environment \n",
+                         "sudo echo 'export NODE_ENV=\"test\"' >> /etc/environment \n",
+                         "sudo echo 'export MYSQL_PORT=\"3306\"' >> /etc/environment \n",
                          "sudo apt install unzip\n"
                       ]
                    ]
@@ -486,8 +487,189 @@
                 "Ref":"DBSubnetGroup"
              }
           }
+       },
+    "CCIUploadToS3Policy":{
+      "Type":"AWS::IAM::ManagedPolicy",
+      "Properties":{
+        "ManagedPolicyName":{
+           "Ref":"CCIUploadS3"
+        },
+         "PolicyDocument": {
+         "Version": "2012-10-17",
+         "Statement":[
+            {
+               "Action":["s3:Get*","s3:PutObject","s3:List*"],
+               "Effect":"Allow",
+               "Resource":[
+                  {"Fn::Join":["",["arn:aws:s3:::",{"Ref":"CodeDeployBucket"}]]},
+                  {"Fn::Join":["",["arn:aws:s3:::",{"Ref":"CodeDeployBucket"},"/*"]]}
+               ]
+            }
+         ]
+        },
+        "Users": ["circleci"]
+      }
+   },
+   "EC2CodeDeployS3Policy":{
+      "Type":"AWS::IAM::ManagedPolicy",
+      "Properties":{
+        "ManagedPolicyName":{
+           "Ref":"CDEC2ReadS3"
+        },
+         "PolicyDocument": {
+         "Version": "2012-10-17",
+         "Statement":[
+            {
+               "Action":["s3:Get*","s3:List*"],
+               "Effect":"Allow",
+               "Resource":[
+                  {"Fn::Join":["",["arn:aws:s3:::",{"Ref":"CodeDeployBucket"}]]},
+                  {"Fn::Join":["",["arn:aws:s3:::",{"Ref":"CodeDeployBucket"},"/*"]]}
+               ]
+            }
+         ]
+        }
+      }
+   },
+   "CCICodeDeployPolicy":{
+      "Type":"AWS::IAM::ManagedPolicy",
+      "Properties":{
+        "ManagedPolicyName":{
+           "Ref":"CCICodeDeploy"
+        },
+        "PolicyDocument": {
+         "Version": "2012-10-17",
+         "Statement": [
+           {
+             "Effect": "Allow",
+             "Action": [
+               "codedeploy:RegisterApplicationRevision",
+               "codedeploy:GetApplicationRevision"
+             ],
+             "Resource": [
+               {"Fn::Join":["",["arn:aws:codedeploy:",{"Ref":"AWS::Region"},":",{"Ref":"AWSAccountID"},":application:",{"Ref":"CodeDeployAppName"}]]}
+             ]
+           },
+           {
+             "Effect": "Allow",
+             "Action": [
+               "codedeploy:CreateDeployment",
+               "codedeploy:GetDeployment"
+             ],
+             "Resource": [
+               "*"
+             ]
+           },
+           {
+             "Effect": "Allow",
+             "Action": [
+               "codedeploy:GetDeploymentConfig"
+             ],
+             "Resource": [
+               {"Fn::Join":["",["arn:aws:codedeploy:",{"Ref":"AWS::Region"},":",{"Ref":"AWSAccountID"},":deploymentconfig:CodeDeployDefault.OneAtATime"]]},
+               {"Fn::Join":["",["arn:aws:codedeploy:",{"Ref":"AWS::Region"},":",{"Ref":"AWSAccountID"},":deploymentconfig:CodeDeployDefault.HalfAtATime"]]},
+               {"Fn::Join":["",["arn:aws:codedeploy:",{"Ref":"AWS::Region"},":",{"Ref":"AWSAccountID"},":deploymentconfig:CodeDeployDefault.AllAtOnce"]]}
+             ]
+           }
+         ]
+       },
+       "Users": ["circleci"]
+      }
+   },
+   "CodeDeployIamRole":{
+      "Type":"AWS::IAM::Role",
+      "Properties":{
+         "AssumeRolePolicyDocument":
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": [
+                                "ec2.amazonaws.com"
+                            ]
+                        },
+                        "Action": ["sts:AssumeRole"]
+                    }
+                ]
+            },
+         "ManagedPolicyArns":[{"Ref" : "EC2CodeDeployS3Policy"},{"Ref" : "IamPolicy"}],
+         "Description":"Iam Role to host web application in EC2",
+         "RoleName":{
+            "Ref":"EC2CodeDeployRole"
+         }
+      }
+   },
+   "CodeDeployServiceRole":{
+      "Type":"AWS::IAM::Role",
+      "Properties":{
+         "AssumeRolePolicyDocument":
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": [
+                                "codedeploy.amazonaws.com"
+                            ]
+                        },
+                        "Action": ["sts:AssumeRole"]
+                    }
+                ]
+            },
+         "ManagedPolicyArns":["arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"],
+         "Description":"Iam Role to host web application in EC2",
+         "RoleName":{
+            "Ref":"ServiceCodeDeployRole"
+         }
+      }
+   },
+   "CodeDeployApp":{
+      "Type" : "AWS::CodeDeploy::Application",
+      "Properties" : {
+         "ApplicationName" : {
+            "Ref": "CodeDeployAppName"
+         },
+         "ComputePlatform" : "Server"
+      }
+
+   },
+   "CodeDeploymentgroup":{
+      "Type" : "AWS::CodeDeploy::DeploymentGroup",
+      "Properties" : {
+         "ApplicationName" : {
+            "Ref":"CodeDeployApp"
+         },
+         "AutoRollbackConfiguration" : { 
+               "Enabled" : "true",
+               "Events": ["DEPLOYMENT_FAILURE"]
+         },
+         "ServiceRoleArn": {
+            "Fn::GetAtt": [
+              "CodeDeployServiceRole",
+               "Arn"
+            ]
+          },
+         "DeploymentConfigName" : "CodeDeployDefault.OneAtATime",
+         "DeploymentGroupName" : {
+            "Ref":"CodeDeployGroupName"
+         },
+         "DeploymentStyle" : {
+            "DeploymentOption": "WITHOUT_TRAFFIC_CONTROL",
+            "DeploymentType" : "IN_PLACE"
+         },
+         "Ec2TagFilters" : [
+                     {
+                     "Key" : "Name",
+                     "Type" : "KEY_AND_VALUE",
+                     "Value" : "WebAppInstance"
+                     }
+            ]
+         }
        }
-    },
+},
     "Outputs":{
        "VPC":{
           "Description":"Newly Created VPC",
@@ -514,4 +696,5 @@
           }
        }
     }
- }
+
+}
