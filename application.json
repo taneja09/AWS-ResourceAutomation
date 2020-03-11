@@ -2,26 +2,26 @@
     "AWSTemplateFormatVersion":"2010-09-09",
     "Description":"Launch EC2 - CSYE 6225 Spring 2020",
     "Parameters":{
-       "VPCName":{
+      "VPCName":{
           "Type":"String"
-       },
-       "VPCCidrBlock":{
+      },
+      "VPCCidrBlock":{
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-       },
-       "PubSubnetCidrBlock1":{
+      },
+      "PubSubnetCidrBlock1":{
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-       },
-       "PubSubnetCidrBlock2":{
+      },
+      "PubSubnetCidrBlock2":{
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-       },
-       "PubSubnetCidrBlock3":{
+      },
+      "PubSubnetCidrBlock3":{
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-       },
-       "EC2InstanceVol":{
+      },
+      "EC2InstanceVol":{
          "Type":"String"
       },
       "RDSInstanceVol":{
@@ -60,7 +60,6 @@
       "CCICodeDeploy":{
          "Type":"String"
       },
-
       "AWSAccountID":{
          "Type":"String"
       },
@@ -351,31 +350,6 @@
             }
           }
        },
-       "IamRole":{
-          "Type":"AWS::IAM::Role",
-          "Properties":{
-             "AssumeRolePolicyDocument":
-                {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                        {
-                            "Effect": "Allow",
-                            "Principal": {
-                                "Service": [
-                                    "ec2.amazonaws.com"
-                                ]
-                            },
-                            "Action": ["sts:AssumeRole"]
-                        }
-                    ]
-                },
-             "Description":"Iam Role for EC2 instance with S3 Bucket Policy attached",
-             "RoleName":{
-                "Ref":"EC2IamRole"
-             }
-          }
-       },
-
        "EC2InstanceProfile": {
         "Type": "AWS::IAM::InstanceProfile",
         "Properties": {

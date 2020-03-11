@@ -1,105 +1,102 @@
 [
   {
-  "ParameterKey": "VPCName",
-  "ParameterValue": "CloudFormationInfra"
+     "ParameterKey": "VPCName",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "VPCCidrBlock",
-  "ParameterValue": "172.31.0.0/16"
+     "ParameterKey": "VPCCidrBlock",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "PubSubnetCidrBlock1",
-  "ParameterValue": "172.31.0.0/20"
+     "ParameterKey": "PubSubnetCidrBlock1",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "PubSubnetCidrBlock2",
-  "ParameterValue": "172.31.16.0/20"
+     "ParameterKey": "PubSubnetCidrBlock2",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "PubSubnetCidrBlock3",
-  "ParameterValue": "172.31.32.0/20"
+     "ParameterKey": "PubSubnetCidrBlock3",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "EC2InstanceVol",
-  "ParameterValue": "20"
+     "ParameterKey": "EC2InstanceVol",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "RDSInstanceVol",
-  "ParameterValue": "10"
+     "ParameterKey": "RDSInstanceVol",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "RDSPublicAccessibility",
-  "ParameterValue": "false"
+     "ParameterKey": "RDSPublicAccessibility",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "DBUsername",
-  "ParameterValue": "dbuser"
+     "ParameterKey": "DBUsername",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "DBPassword",
-  "ParameterValue": "Divinity0818"
+     "ParameterKey": "DBPassword",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "RDSDBName",
-  "ParameterValue": "csye6225"
+     "ParameterKey": "RDSDBName",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "DBInstanceId",
-  "ParameterValue": "csye6225-spring2020"
+     "ParameterKey": "DBInstanceId",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "EC2IamRole",
-  "ParameterValue": "EC2-CSYE6225"
+     "ParameterKey": "EC2IamRole",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "EC2IamPolicy",
-  "ParameterValue": "webappS3"
+     "ParameterKey": "EC2IamPolicy",
+     "ParameterValue": ""
   },
   {
-  "ParameterKey": "AMIImage",
-  "ParameterValue":"ami-0cfe07ea30fc01598"
+     "ParameterKey": "AMIImage",
+     "ParameterValue": ""
   },
   {
-    "ParameterKey": "CDEC2ReadS3",
-    "ParameterValue": "CodeDeploy-EC2-S3"
+     "ParameterKey": "CDEC2ReadS3",
+     "ParameterValue": ""
   },
   {
-    "ParameterKey": "CCIUploadS3",
-    "ParameterValue": "CircleCI-Upload-To-S3"
+     "ParameterKey": "CCIUploadS3",
+     "ParameterValue": ""
   },
   {
-    "ParameterKey": "CCICodeDeploy",
-    "ParameterValue": "CircleCI-Code-Deploy"
-  },
-
-  {
-    "ParameterKey": "AWSAccountID",
-    "ParameterValue": "358073346779"
-  },
-
-  {
-    "ParameterKey": "CodeDeployBucket",
-    "ParameterValue": "codedeploy.divyataneja.me"
+     "ParameterKey": "CCICodeDeploy",
+     "ParameterValue": ""
   },
   {
-    "ParameterKey": "EC2CodeDeployRole",
-    "ParameterValue": "CodeDeployEC2ServiceRole"
+     "ParameterKey": "AWSAccountID",
+     "ParameterValue": ""
   },
   {
-    "ParameterKey": "ServiceCodeDeployRole",
-    "ParameterValue": "CodeDeployServiceRole"
+     "ParameterKey": "CodeDeployBucket",
+     "ParameterValue": ""
   },
   {
-    "ParameterKey": "CodeDeployAppName",
-    "ParameterValue": "csye6225-webapp"
+     "ParameterKey": "EC2CodeDeployRole",
+     "ParameterValue": ""
   },
   {
-    "ParameterKey": "CodeDeployGroupName",
-    "ParameterValue": "csye6225-webapp-deployment"
+     "ParameterKey": "ServiceCodeDeployRole",
+     "ParameterValue": ""
   },
   {
-    "ParameterKey": "CodeDeployS3Bucket",
-    "ParameterValue": "codedeploy.divyataneja.me"
+     "ParameterKey": "CodeDeployAppName",
+     "ParameterValue": ""
+  },
+  {
+     "ParameterKey": "CodeDeployGroupName",
+     "ParameterValue": ""
+  },
+  {
+     "ParameterKey": "CodeDeployS3Bucket",
+     "ParameterValue": ""
   }
-
-  ]
+]
