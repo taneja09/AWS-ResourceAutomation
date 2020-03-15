@@ -1,102 +1,102 @@
 [
-  {
-     "ParameterKey": "VPCName",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "VPCCidrBlock",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "PubSubnetCidrBlock1",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "PubSubnetCidrBlock2",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "PubSubnetCidrBlock3",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "EC2InstanceVol",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "RDSInstanceVol",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "RDSPublicAccessibility",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "DBUsername",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "DBPassword",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "RDSDBName",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "DBInstanceId",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "EC2IamRole",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "EC2IamPolicy",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "AMIImage",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "CDEC2ReadS3",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "CCIUploadS3",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "CCICodeDeploy",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "AWSAccountID",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "CodeDeployBucket",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "EC2CodeDeployRole",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "ServiceCodeDeployRole",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "CodeDeployAppName",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "CodeDeployGroupName",
-     "ParameterValue": ""
-  },
-  {
-     "ParameterKey": "CodeDeployS3Bucket",
-     "ParameterValue": ""
-  }
-]
+   {
+   "ParameterKey": "VPCName",
+   "ParameterValue": "CloudFormationInfra"
+   },
+   {
+   "ParameterKey": "VPCCidrBlock",
+   "ParameterValue": "172.31.0.0/16"
+   },
+   {
+   "ParameterKey": "PubSubnetCidrBlock1",
+   "ParameterValue": "172.31.0.0/20"
+   },
+   {
+   "ParameterKey": "PubSubnetCidrBlock2",
+   "ParameterValue": "172.31.16.0/20"
+   },
+   {
+   "ParameterKey": "PubSubnetCidrBlock3",
+   "ParameterValue": "172.31.32.0/20"
+   },
+   {
+   "ParameterKey": "EC2InstanceVol",
+   "ParameterValue": "20"
+   },
+   {
+   "ParameterKey": "RDSInstanceVol",
+   "ParameterValue": "10"
+   },
+   {
+   "ParameterKey": "RDSPublicAccessibility",
+   "ParameterValue": "false"
+   },
+   {
+   "ParameterKey": "DBUsername",
+   "ParameterValue": "dbuser"
+   },
+   {
+   "ParameterKey": "DBPassword",
+   "ParameterValue": "Divinity0818"
+   },
+   {
+   "ParameterKey": "RDSDBName",
+   "ParameterValue": "csye6225"
+   },
+   {
+   "ParameterKey": "DBInstanceId",
+   "ParameterValue": "csye6225-spring2020"
+   },
+   {
+   "ParameterKey": "EC2IamRole",
+   "ParameterValue": "EC2-CSYE6225"
+   },
+   {
+   "ParameterKey": "EC2IamPolicy",
+   "ParameterValue": "webappS3"
+   },
+   {
+   "ParameterKey": "AMIImage",
+   "ParameterValue":"ami-00d36aca8f58c0c41"
+   },
+   {
+   "ParameterKey": "CDEC2ReadS3",
+   "ParameterValue": "CodeDeploy-EC2-S3"
+   },
+   {
+   "ParameterKey": "CCIUploadS3",
+   "ParameterValue": "CircleCI-Upload-To-S3"
+   },
+   {
+   "ParameterKey": "CCICodeDeploy",
+   "ParameterValue": "CircleCI-Code-Deploy"
+   },
+   {
+   "ParameterKey": "AWSAccountID",
+   "ParameterValue": "358073346779"
+   },
+   {
+   "ParameterKey": "CodeDeployBucket",
+   "ParameterValue": "codedeploy.divyataneja.me"
+   },
+   {
+   "ParameterKey": "EC2CodeDeployRole",
+   "ParameterValue": "CodeDeployEC2ServiceRole"
+   },
+   {
+   "ParameterKey": "ServiceCodeDeployRole",
+   "ParameterValue": "CodeDeployServiceRole"
+   },
+   {
+   "ParameterKey": "CodeDeployAppName",
+   "ParameterValue": "csye6225-webapp"
+   },
+   {
+   "ParameterKey": "CodeDeployGroupName",
+   "ParameterValue": "csye6225-webapp-deployment"
+   },
+   {
+   "ParameterKey": "CodeDeployS3Bucket",
+   "ParameterValue": "codedeploy.divyataneja.me"
+   }
+   ]   
