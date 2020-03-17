@@ -77,9 +77,6 @@
       },
       "CodeDeployGroupName":{
          "Type":"String"
-      },
-      "CodeDeployS3Bucket":{
-         "Type":"String"
       }
     },
     "Resources":{

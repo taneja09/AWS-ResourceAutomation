@@ -57,7 +57,7 @@
    },
    {
    "ParameterKey": "AMIImage",
-   "ParameterValue":"ami-00d36aca8f58c0c41"
+   "ParameterValue":"ami-05768b208e4c72155"
    },
    {
    "ParameterKey": "CDEC2ReadS3",
@@ -94,9 +94,5 @@
    {
    "ParameterKey": "CodeDeployGroupName",
    "ParameterValue": "csye6225-webapp-deployment"
-   },
-   {
-   "ParameterKey": "CodeDeployS3Bucket",
-   "ParameterValue": "codedeploy.divyataneja.me"
    }
    ]   
