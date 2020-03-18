@@ -77,9 +77,6 @@
       },
       "CodeDeployGroupName":{
          "Type":"String"
-      },
-      "CodeDeployS3Bucket":{
-         "Type":"String"
       }
     },
     "Resources":{
@@ -594,7 +591,7 @@
                     }
                 ]
             },
-         "ManagedPolicyArns":[{"Ref" : "EC2CodeDeployS3Policy"},{"Ref" : "IamPolicy"}],
+         "ManagedPolicyArns":[{"Ref" : "EC2CodeDeployS3Policy"},{"Ref" : "IamPolicy"},"arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"],
          "Description":"Iam Role to host web application in EC2",
          "RoleName":{
             "Ref":"EC2CodeDeployRole"
