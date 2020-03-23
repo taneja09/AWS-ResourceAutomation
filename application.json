@@ -21,6 +21,10 @@
           "Type":"String",
           "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
       },
+      "PubSubnetCidrBlock4":{
+         "Type":"String",
+         "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+     },
       "EC2InstanceVol":{
          "Type":"String"
       },
@@ -76,6 +80,12 @@
          "Type":"String"
       },
       "CodeDeployGroupName":{
+         "Type":"String"
+      },
+      "LaunchconfigName":{
+         "Type":"String"
+      },
+      "HostedZoneIdR53":{
          "Type":"String"
       }
     },
@@ -179,6 +189,28 @@
              "MapPublicIpOnLaunch":false
           }
        },
+       "PublicSubnetD":{
+         "Type":"AWS::EC2::Subnet",
+         "Properties":{
+            "AvailabilityZone":{
+               "Fn::Select":[
+                  3,
+                  {
+                     "Fn::GetAZs":{
+                        "Ref":"AWS::Region"
+                     }
+                  }
+               ]
+            },
+            "VpcId":{
+               "Ref":"VPC"
+            },
+            "CidrBlock":{
+               "Ref":"PubSubnetCidrBlock4"
+            },
+            "MapPublicIpOnLaunch":true
+         }
+      },
        "RouteTable":{
           "Type":"AWS::EC2::RouteTable",
           "Properties":{
@@ -219,6 +251,17 @@
              }
           }
        },
+       "SubnetDRouteTableAssociation":{
+         "Type":"AWS::EC2::SubnetRouteTableAssociation",
+         "Properties":{
+            "RouteTableId":{
+               "Ref":"RouteTable"
+            },
+            "SubnetId":{
+               "Ref":"PublicSubnetD"
+            }
+         }
+      },
        "SubnetBRouteTableAssociation":{
           "Type":"AWS::EC2::SubnetRouteTableAssociation",
           "Properties":{
@@ -665,8 +708,225 @@
                      }
             ]
          }
+       },
+
+       "autoScalingLaunchConfig":{
+         "Type" : "AWS::AutoScaling::LaunchConfiguration",
+         "Properties" : {
+            "AssociatePublicIpAddress" : "true",
+            "BlockDeviceMappings":[
+               {
+                  "DeviceName":"/dev/sda1",
+                  "Ebs":{
+                     "DeleteOnTermination":"true",
+                     "VolumeSize":{
+                        "Ref":"EC2InstanceVol"
+                     },
+                     "VolumeType":"gp2"
+                  }
+               }
+            ],
+            "IamInstanceProfile":{
+               "Ref":"EC2InstanceProfile"
+            },
+            "ImageId":{
+               "Ref":"AMIImage"
+            },
+            "InstanceMonitoring" : "false",
+            "InstanceType":"t2.micro",
+            "KeyName":"awswork",
+            "LaunchConfigurationName" : {
+               "Ref":"LaunchconfigName"
+            },
+            "SecurityGroups":[
+               {
+                  "Ref":"EC2InstanceSecurityGroup"
+               }
+            ],
+            "UserData":{
+               "Fn::Base64":{
+                  "Fn::Join":[
+                     "",
+                     [  
+                       "#!/bin/bash -xe \n",
+                       "echo '#!/bin/sh' >> myvariables.sh \n",
+                       "cd /home/ubuntu \n",
+                       {"Fn::Join": ["",
+                          ["sudo echo ","'", "export MYSQL_USERNAME=","\"",{"Ref": "DBUsername"},"\"","'"," >> /etc/environment \n" ]]
+                       },
+                       {"Fn::Join": ["",
+                       ["sudo echo ","'", "export MYSQL_ROOT_PASSWORD=","\"",{"Ref":"DBPassword"},"\"","'"," >> /etc/environment \n" ]]
+                       },
+                       {"Fn::Join": ["",
+                          ["sudo echo ","'", "export MYSQL_DATABASE=","\"",{"Ref":"RDSDBName"},"\"","'"," >> /etc/environment \n" ]]
+                       },
+                       {"Fn::Join": ["",
+                             ["sudo echo ","'", "export MYSQL_HOST=","\"",{"Fn::GetAtt": ["RDSInstance","Endpoint.Address"]},"\"","'"," >> /etc/environment \n" ]]
+                       },
+                       {"Fn::Join": ["",
+                           ["sudo echo ","'", "export BucketName=","\"",{"Ref": "S3Bucket"},"\"","'"," >> /etc/environment \n"]]
+                       },
+                        "sudo echo 'export MYSQL_DIALECT=\"mysql\"' >> /etc/environment \n",
+                        "sudo echo 'export NODE_ENV=\"test\"' >> /etc/environment \n",
+                        "sudo echo 'export MYSQL_PORT=\"3306\"' >> /etc/environment \n",
+                        "sudo apt install unzip\n"
+                     ]
+                  ]
+               }
+            }
+         }
+      },
+      "autoScalingGroup":{
+         "Type" : "AWS::AutoScaling::AutoScalingGroup",
+         "Properties" : {
+            "AutoScalingGroupName" : "WebAppAutoScalingGroup",
+            "Cooldown" : "60",
+            "DesiredCapacity" : "1",
+            "LaunchConfigurationName":{
+               "Ref": "autoScalingLaunchConfig"
+            },
+            "MaxSize":"2",
+            "MinSize":"1",
+            "Tags":[{
+               "Key" : "Name",
+               "PropagateAtLaunch" : "true",
+               "Value" : "WebAppInstance"
+            }],
+            "VPCZoneIdentifier":[
+               {"Ref":"PublicSubnetA"}, 
+               {"Ref":"PublicSubnetD"}]
+         }
+      },
+      "WebServerScaleUpPolicy": {
+         "Type": "AWS::AutoScaling::ScalingPolicy",
+         "Properties": {
+           "AdjustmentType": "ChangeInCapacity",
+           "AutoScalingGroupName": {
+             "Ref": "autoScalingGroup"
+           },
+           "Cooldown": "60",
+           "ScalingAdjustment": "1"
+         }
+       },
+       "WebServerScaleDownPolicy": {
+         "Type": "AWS::AutoScaling::ScalingPolicy",
+         "Properties": {
+           "AdjustmentType": "ChangeInCapacity",
+           "AutoScalingGroupName": {
+             "Ref": "autoScalingGroup"
+           },
+           "Cooldown": "60",
+           "ScalingAdjustment": "-1"
+         }
+       },
+       "CPUAlarmHigh": {
+         "Type": "AWS::CloudWatch::Alarm",
+         "Properties": {
+            "AlarmDescription": "Scale-up if CPU > 5% for 1 minutes",
+            "MetricName": "CPUUtilization",
+            "Namespace": "AWS/EC2",
+            "Statistic": "Average",
+            "Period": "60",
+            "EvaluationPeriods": "1",
+            "Threshold": "5",
+            "AlarmActions": [ { "Ref": "WebServerScaleUpPolicy" } ],
+            "ComparisonOperator": "GreaterThanThreshold",
+            "Dimensions": [ {
+               "Name": "AutoScalingGroupName",
+               "Value": { "Ref": "autoScalingGroup" }
+            } ] 
+         }
+      },
+      "CPUAlarmLow": {
+        "Type": "AWS::CloudWatch::Alarm",
+        "Properties": {
+          "AlarmDescription": "Scale-down if CPU < 5% for 1 minutes",
+          "MetricName": "CPUUtilization",
+          "Namespace": "AWS/EC2",
+          "Statistic": "Average",
+          "Period": "60",
+          "EvaluationPeriods": "1",
+          "Threshold": "5",
+          "AlarmActions": [{"Ref": "WebServerScaleDownPolicy"}],
+          "ComparisonOperator": "LessThanThreshold",
+          "Dimensions": [{
+              "Name": "AutoScalingGroupName",
+              "Value": {"Ref": "autoScalingGroup"}
+            }]
+        }
+      },
+      "LoadBalancer":{
+            "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
+            "Properties" : {
+                "IpAddressType" : "ipv4",
+                "Name" : "webAppLoadBalancer",
+                "Scheme" : "internet-facing",
+                "Subnets" : [ 
+                   {"Ref":"PublicSubnetA"},
+                   {"Ref":"PublicSubnetD"}  
+                 ],
+                 "SecurityGroups" : [ {
+                    "Ref":"EC2InstanceSecurityGroup"
+                 }],
+                "Tags" : [ {
+                  "Key" : "Name",
+                  "Value" : "LoadBalancerEC2"
+                }],
+                "Type" : "application"
+              }
+          },
+      "LoadBalancerTargetGroup":{
+         "Type" : "AWS::ElasticLoadBalancingV2::TargetGroup",
+         "Properties" : {
+             "Name" : "webAppEC2TargetGroup",
+             "Port" : "3000",
+             "Protocol" : "HTTP",
+             "Tags" : [{
+               "Key" : "Name",
+               "Value" : "webAppTargetGroup"
+             }],
+             "Targets" : [{
+                  "Id" : {
+                     "Ref":"EC2Instance"
+                  },
+                  "Port" : "3000"
+             }],
+             "TargetType" : "instance",
+             "VpcId" : {
+                "Ref":"VPC"
+             }
+           }
+       },
+       "LoadBalancerListener":{
+         "Type" : "AWS::ElasticLoadBalancingV2::Listener",
+         "Properties" : {
+             "DefaultActions" : [{
+               "TargetGroupArn" : {
+                  "Fn::Join":["",["arn:aws:elasticloadbalancing:",{"Ref":"AWS::Region"},":",{"Ref":"AWSAccountID"},":",{"Fn::GetAtt" : ["LoadBalancerTargetGroup", "TargetGroupFullName"]}]]
+               },
+               "Type" : "forward"
+             }],
+             "LoadBalancerArn" : {"Fn::Join":["",["arn:aws:elasticloadbalancing:",{"Ref":"AWS::Region"},":",{"Ref":"AWSAccountID"},":loadbalancer/",{"Fn::GetAtt" : ["LoadBalancer", "LoadBalancerFullName"]}]]},
+             "Port" : "80",
+             "Protocol" : "HTTP"
+           }
+       },
+       "Route53DNS":{
+         "Type" : "AWS::Route53::RecordSet",
+         "Properties" : {
+             "AliasTarget" : {
+                  "DNSName" : {"Fn::GetAtt" : ["LoadBalancer", "DNSName"]},
+                  "EvaluateTargetHealth" : "false",
+                  "HostedZoneId" : {"Fn::GetAtt" : ["LoadBalancer", "CanonicalHostedZoneID"]}
+             },
+             "HostedZoneId" : {
+                "Ref":"HostedZoneIdR53"
+             },
+             "Name" : "dev.divyataneja.me",
+             "Type" : "A"
+           }
        }
-},
+   },
     "Outputs":{
        "VPC":{
           "Description":"Newly Created VPC",
