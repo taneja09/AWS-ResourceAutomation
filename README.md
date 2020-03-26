@@ -14,6 +14,9 @@ The stack will create the following resources into aws account.
 5. Code deploy roles and policies associated with roles
 6. CircleCI user policy to run the code deploy & upload code artifact in S3 
 6. Trigger the EC2 instance and RDS Instance
+7. Load Balancer, alarm configuration and autoscaling groups
+8. A new DNS with load balancer in AWS Route53
+
 
 **Environment Variables**
 Environment variables such as VPC name, CIDR block values, RDS size EC2 Instance names etc. are provided in variables.json 
