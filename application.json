@@ -315,11 +315,13 @@
                    "ToPort":"22"
                 },
                 {
-                   "IpProtocol":"tcp",
-                   "CidrIp":"0.0.0.0/0",
-                   "FromPort":"3000",
-                   "ToPort":"3000"
-                }
+                  "IpProtocol":"tcp",
+                  "FromPort":"3000",
+                  "ToPort":"3000",
+                  "SourceSecurityGroupId":{
+                     "Ref": "LoadBalancerSecurityGroup"
+                  }
+               }
              ]
           }
        },
@@ -793,6 +795,36 @@
             }]
         }
       },
+      "LoadBalancerSecurityGroup":{
+         "Type":"AWS::EC2::SecurityGroup",
+         "Properties":{
+            "GroupDescription":"Security Group for Load Balancer",
+            "GroupName":"LoadBalancer",
+            "VpcId":{
+               "Ref":"VPC"
+            },
+            "SecurityGroupIngress":[
+               {
+                  "IpProtocol":"tcp",
+                  "CidrIp":"0.0.0.0/0",
+                  "FromPort":"443",
+                  "ToPort":"443"
+               },
+               {
+                  "IpProtocol":"tcp",
+                  "CidrIp":"0.0.0.0/0",
+                  "FromPort":"80",
+                  "ToPort":"80"
+               },
+               {
+                  "IpProtocol":"tcp",
+                  "CidrIp":"0.0.0.0/0",
+                  "FromPort":"22",
+                  "ToPort":"22"
+               }
+            ]
+         }
+      },
       "LoadBalancer":{
             "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
             "Properties" : {
@@ -804,7 +836,7 @@
                    {"Ref":"PublicSubnetD"}  
                  ],
                  "SecurityGroups" : [ {
-                    "Ref":"EC2InstanceSecurityGroup"
+                    "Ref":"LoadBalancerSecurityGroup"
                  }],
                 "Tags" : [ {
                   "Key" : "Name",
