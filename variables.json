@@ -1,102 +1,114 @@
 [
-   {
-      "ParameterKey": "VPCName",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "VPCCidrBlock",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "PubSubnetCidrBlock1",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "PubSubnetCidrBlock2",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "PubSubnetCidrBlock3",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "EC2InstanceVol",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "RDSInstanceVol",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "RDSPublicAccessibility",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "DBUsername",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "DBPassword",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "RDSDBName",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "DBInstanceId",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "EC2IamRole",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "EC2IamPolicy",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "AMIImage",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "CDEC2ReadS3",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "CCIUploadS3",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "CCICodeDeploy",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "AWSAccountID",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "CodeDeployBucket",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "EC2CodeDeployRole",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "ServiceCodeDeployRole",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "CodeDeployAppName",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "CodeDeployGroupName",
-      "ParameterValue": ""
-   },
-   {
-      "ParameterKey": "CodeDeployS3Bucket",
-      "ParameterValue": ""
-   }
- ]
+    {
+    "ParameterKey": "VPCName",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "VPCCidrBlock",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "PubSubnetCidrBlock1",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "PubSubnetCidrBlock2",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "PubSubnetCidrBlock3",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "PubSubnetCidrBlock4",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "EC2InstanceVol",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "RDSInstanceVol",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "RDSPublicAccessibility",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "DBUsername",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "DBPassword",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "RDSDBName",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "DBInstanceId",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "EC2IamRole",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "EC2IamPolicy",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "AMIImage",
+    "ParameterValue":""
+    },
+    {
+    "ParameterKey": "CDEC2ReadS3",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "CCIUploadS3",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "CCICodeDeploy",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "AWSAccountID",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "CodeDeployBucket",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "EC2CodeDeployRole",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "ServiceCodeDeployRole",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "CodeDeployAppName",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "CodeDeployGroupName",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "LaunchconfigName",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "HostedZoneIdR53",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "FinalDNSName",
+    "ParameterValue": ""
+    }
+    ]
