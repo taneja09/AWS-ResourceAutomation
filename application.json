@@ -568,7 +568,14 @@
                     }
                 ]
             },
-         "ManagedPolicyArns":[{"Ref" : "EC2CodeDeployS3Policy"},{"Ref" : "IamPolicy"},"arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"],
+         "ManagedPolicyArns":[
+            {"Ref" : "EC2CodeDeployS3Policy"},
+            {"Ref" : "IamPolicy"},
+            "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
+            "arn:aws:iam::aws:policy/AmazonSQSFullAccess",
+            "arn:aws:iam::aws:policy/AmazonSNSFullAccess",
+            "arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess"
+            ],
          "Description":"Iam Role to host web application in EC2",
          "RoleName":{
             "Ref":"EC2CodeDeployRole"
@@ -936,7 +943,7 @@
              "Description" : "This function send email to user with their due Bills",
              "FunctionName" : "HandleUserBillRequests",
              "Handler" : "index.handler",
-             "Role" : {"Ref": "LambdaIamRole"},
+             "Role" : {"Fn::GetAtt" : ["LambdaIamRole", "Arn"] },
              "Runtime" : "nodejs10.x",
              "Tags" : [ {"Key":"Name", "Value":"LambdaFunction"}]
            }
@@ -944,9 +951,7 @@
        "DDlabdaAccessPolicy":{
          "Type":"AWS::IAM::ManagedPolicy",
          "Properties":{
-           "ManagedPolicyName":{
-              "Ref":"DynamoDBLambdaPolicy"
-           },
+           "ManagedPolicyName":"DynamoDBLambdaPolicy",
             "PolicyDocument": {
             "Version": "2012-10-17",
             "Statement":[
@@ -970,12 +975,16 @@
                    }],
                   "KeySchema" : [  {
                      "AttributeName" : "User_Id",
-                     "AttributeType" : "RANGE"
+                     "KeyType" : "HASH"
                    }],
                   "TableName" : "UserBillsDue",
                   "TimeToLiveSpecification" : {
                      "AttributeName" : "UserTTL",
                      "Enabled" : "True"
+                   },
+                   "ProvisionedThroughput":{
+                     "ReadCapacityUnits" : "5",
+                     "WriteCapacityUnits" : "5"
                    }
                }
       },
@@ -1001,10 +1010,9 @@
                "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess", {"Ref" : "EC2CodeDeployS3Policy"},
                {"Ref":"DDlabdaAccessPolicy"}
             ],
-            "Description":"Iam Role to host web application in EC2",
-            "RoleName":{
-               "Ref":"LambdaRoleExecution"
-            }
+            "Description":"Iam Role for Lambda execution",
+            "RoleName": "LambdaExecutionRole"
+            
          }
 
       },
@@ -1014,7 +1022,7 @@
             "Properties" : {
                 "Action" : "lambda:InvokeFunction",
                 "FunctionName" : {"Fn::GetAtt" : ["LambdaFunction", "Arn"]},
-                "Principal" : {"Fn::GetAtt" : ["SNSTopic", "Arn"]}
+                "Principal" : "sns.amazonaws.com" 
               }
           
          }
