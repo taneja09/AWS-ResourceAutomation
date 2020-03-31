@@ -1006,15 +1006,15 @@
                        }
                    ]
                },
-            "ManagedPolicyArns":["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-               "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess", {"Ref" : "EC2CodeDeployS3Policy"},
+            "ManagedPolicyArns":[
+               "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+               "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess", 
+               {"Ref" : "EC2CodeDeployS3Policy"},
                {"Ref":"DDlabdaAccessPolicy"}
             ],
             "Description":"Iam Role for Lambda execution",
             "RoleName": "LambdaExecutionRole"
-            
          }
-
       },
 
       "LambdaPermissionToSNS":{
@@ -1024,8 +1024,53 @@
                 "FunctionName" : {"Fn::GetAtt" : ["LambdaFunction", "Arn"]},
                 "Principal" : "sns.amazonaws.com" 
               }
-          
-         }
+         },
+         "LambdaCodeDeployApp":{
+            "Type" : "AWS::CodeDeploy::Application",
+            "Properties" : {
+            "ApplicationName" : "lambdaCodeDeploy",
+            "ComputePlatform" : "Lambda"
+            }
+
+         },
+
+            "LambdaDeploymentgroup":{
+               "Type" : "AWS::CodeDeploy::DeploymentGroup",
+               "Properties" : {
+                  "ApplicationName" : "lambdaCodeDeploy",
+                  "AutoRollbackConfiguration" : {
+                  "Enabled" : "true",
+                  "Events": ["DEPLOYMENT_FAILURE"]
+                  },
+                  "ServiceRoleArn": {
+                  "Fn::GetAtt": ["LambdaDeployServiceRole","Arn"]},
+                  "DeploymentGroupName" : {
+                  "Ref":"LambdaCodeDeployGroupName"
+                     }
+                  }
+            },
+            "LambdaDeployServiceRole":{
+                  "Type":"AWS::IAM::Role",
+                  "Properties":{
+                        "AssumeRolePolicyDocument":
+                     {"Version": "2012-10-17",
+                     "Statement": [
+                                 {
+                                 "Effect": "Allow",
+                                 "Principal": {
+                                 "Service": [
+                                       "codedeploy.amazonaws.com"
+                                       ]
+                                    },
+                                 "Action": ["sts:AssumeRole"]
+                                    }
+                                 ]
+                        },
+               "ManagedPolicyArns":["arn:aws:iam::aws:policy/service-role/AWSCodeDeployRoleForLambda"],
+               "Description":"Iam Role for lambda deployment",
+               "RoleName":"lambdaCodeDeployRole"
+               }
+            }        
    },
     "Outputs":{
        "VPC":{
