@@ -742,6 +742,9 @@
                         {"Fn::Join": ["",
                            ["sudo echo ","'", "export SourceEmail=","\"",{"Ref": "SourceEmail"},"\"","'"," >> /etc/environment \n"]]
                         },
+                        {"Fn::Join": ["",
+                           ["sudo echo ","'", "export DNSName=","\"",{"Ref": "FinalDNSName"},"\"","'"," >> /etc/environment \n"]]
+                        },
                         "sudo echo 'export MYSQL_DIALECT=\"mysql\"' >> /etc/environment \n",
                         "sudo echo 'export NODE_ENV=\"test\"' >> /etc/environment \n",
                         "sudo echo 'export MYSQL_PORT=\"3306\"' >> /etc/environment \n",
