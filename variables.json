@@ -110,5 +110,34 @@
     {
     "ParameterKey": "FinalDNSName",
     "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "SNSTopicName",
+    "ParameterValue": ""  
+    },
+    {
+    "ParameterKey": "SQSQueueName",
+    "ParameterValue": ""  
+    },
+    {
+    "ParameterKey": "LambdaFunctionZip",
+    "ParameterValue": ""  
+    },
+    {
+    "ParameterKey": "LambdaFunctionName",
+    "ParameterValue": ""  
+    },
+    {
+    "ParameterKey": "DDTableName",
+    "ParameterValue": ""  
+    },
+    {  
+    "ParameterKey": "LambdaRole",
+    "ParameterValue": "" 
+    },
+    {
+    "ParameterKey": "SourceEmail",
+    "ParameterValue": ""
     }
+       
     ]
