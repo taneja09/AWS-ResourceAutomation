@@ -1,115 +1,143 @@
 [
     {
     "ParameterKey": "VPCName",
-    "ParameterValue": "CloudFormationInfra"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "VPCCidrBlock",
-    "ParameterValue": "172.31.0.0/16"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "PubSubnetCidrBlock1",
-    "ParameterValue": "172.31.0.0/20"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "PubSubnetCidrBlock2",
-    "ParameterValue": "172.31.16.0/20"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "PubSubnetCidrBlock3",
-    "ParameterValue": "172.31.32.0/20"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "PubSubnetCidrBlock4",
-    "ParameterValue": "172.31.64.0/20"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "EC2InstanceVol",
-    "ParameterValue": "20"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "RDSInstanceVol",
-    "ParameterValue": "10"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "RDSPublicAccessibility",
-    "ParameterValue": "false"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "DBUsername",
-    "ParameterValue": "dbuser"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "DBPassword",
-    "ParameterValue": "Divinity0818"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "RDSDBName",
-    "ParameterValue": "csye6225"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "DBInstanceId",
-    "ParameterValue": "csye6225-spring2020"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "EC2IamRole",
-    "ParameterValue": "EC2-CSYE6225"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "EC2IamPolicy",
-    "ParameterValue": "webappS3"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "AMIImage",
-    "ParameterValue":"ami-05f4dfa211d835f4d"
+    "ParameterValue":""
     },
     {
     "ParameterKey": "CDEC2ReadS3",
-    "ParameterValue": "CodeDeploy-EC2-S3"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "CCIUploadS3",
-    "ParameterValue": "CircleCI-Upload-To-S3"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "CCICodeDeploy",
-    "ParameterValue": "CircleCI-Code-Deploy"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "AWSAccountID",
-    "ParameterValue": "358073346779"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "CodeDeployBucket",
-    "ParameterValue": "codedeploy.divyataneja.me"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "EC2CodeDeployRole",
-    "ParameterValue": "CodeDeployEC2ServiceRole"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "ServiceCodeDeployRole",
-    "ParameterValue": "CodeDeployServiceRole"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "CodeDeployAppName",
-    "ParameterValue": "csye6225-webapp"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "CodeDeployGroupName",
-    "ParameterValue": "csye6225-webapp-deployment"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "LaunchconfigName",
-    "ParameterValue": "asg_launch_config"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "HostedZoneIdR53",
-    "ParameterValue": "Z171P3TAS9MZXR"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "FinalDNSName",
-    "ParameterValue": "dev.divyataneja.me"
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "SNSTopicName",
+    "ParameterValue": ""  
+    },
+    {
+    "ParameterKey": "SQSQueueName",
+    "ParameterValue": ""  
+    },
+    {
+    "ParameterKey": "LambdaFunctionZip",
+    "ParameterValue": ""  
+    },
+    {
+    "ParameterKey": "LambdaFunctionName",
+    "ParameterValue": ""  
+    },
+    {
+    "ParameterKey": "DDTableName",
+    "ParameterValue": ""  
+    },
+    {  
+    "ParameterKey": "LambdaRole",
+    "ParameterValue": "" 
+    },
+    {
+    "ParameterKey": "SourceEmail",
+    "ParameterValue": ""
     }
-
+       
     ]

@@ -90,6 +90,27 @@
       },
       "FinalDNSName":{
          "Type":"String"
+      },
+      "SNSTopicName":{
+         "Type":"String"
+      },
+      "SQSQueueName":{
+         "Type":"String"
+      },
+      "LambdaFunctionZip":{
+         "Type":"String"
+      },
+      "LambdaFunctionName":{
+         "Type":"String"
+      },
+      "DDTableName":{
+         "Type":"String"
+      },
+      "LambdaRole":{
+         "Type":"String"
+      },
+      "SourceEmail":{
+         "Type":"String"
       }
     },
     "Resources":{
@@ -712,6 +733,15 @@
                        {"Fn::Join": ["",
                            ["sudo echo ","'", "export BucketName=","\"",{"Ref": "S3Bucket"},"\"","'"," >> /etc/environment \n"]]
                        },
+                       {"Fn::Join": ["",
+                        ["sudo echo ","'", "export SNSTopicArn=","\"",{"Ref": "SNSTopic"},"\"","'"," >> /etc/environment \n"]]
+                        },
+                        {"Fn::Join": ["",
+                           ["sudo echo ","'", "export SQSQueryURL=","\"",{"Ref": "SQSForRequest"},"\"","'"," >> /etc/environment \n"]]
+                        },
+                        {"Fn::Join": ["",
+                           ["sudo echo ","'", "export SourceEmail=","\"",{"Ref": "SourceEmail"},"\"","'"," >> /etc/environment \n"]]
+                        },
                         "sudo echo 'export MYSQL_DIALECT=\"mysql\"' >> /etc/environment \n",
                         "sudo echo 'export NODE_ENV=\"test\"' >> /etc/environment \n",
                         "sudo echo 'export MYSQL_PORT=\"3306\"' >> /etc/environment \n",
@@ -918,7 +948,9 @@
                "Key" : "Name",
                "Value" : "BillServiceSNS"
              }],
-             "TopicName" : "BillRequest"
+             "TopicName" : {
+                "Ref": "SNSTopicName"
+             }
            }
 
        },
@@ -926,11 +958,10 @@
          "Type" : "AWS::SQS::Queue",
          "Properties" : {
              "MessageRetentionPeriod" : "3600",
-             "QueueName" : "BillQueue",
+             "QueueName" : {"Ref":"SQSQueueName"},
              "MaximumMessageSize":"1024"
            }
        },
-
        "LambdaFunction":{
          "Type" : "AWS::Lambda::Function",
          "Properties" : {
@@ -938,10 +969,12 @@
                "S3Bucket" : {
                   "Ref":"CodeDeployBucket"
                },
-               "S3Key" : "lambdaFunction.zip"
+               "S3Key" : {
+                  "Ref": "LambdaFunctionZip"
+               }
              },
              "Description" : "This function send email to user with their due Bills",
-             "FunctionName" : "HandleUserBillRequests",
+             "FunctionName" : {"Ref":"LambdaFunctionName"},
              "Handler" : "index.handler",
              "Role" : {"Fn::GetAtt" : ["LambdaIamRole", "Arn"] },
              "Runtime" : "nodejs10.x",
@@ -977,7 +1010,7 @@
                      "AttributeName" : "User_Id",
                      "KeyType" : "HASH"
                    }],
-                  "TableName" : "UserBillsDue",
+                  "TableName" : {"Ref":"DDTableName"},
                   "TimeToLiveSpecification" : {
                      "AttributeName" : "UserTTL",
                      "Enabled" : "True"
@@ -1006,71 +1039,27 @@
                        }
                    ]
                },
-            "ManagedPolicyArns":[
+            "ManagedPolicyArns":
+            [
                "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
                "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess", 
+               "arn:aws:iam::aws:policy/AmazonSESFullAccess",
                {"Ref" : "EC2CodeDeployS3Policy"},
                {"Ref":"DDlabdaAccessPolicy"}
             ],
             "Description":"Iam Role for Lambda execution",
-            "RoleName": "LambdaExecutionRole"
+            "RoleName": {"Ref":"LambdaRole"}
          }
       },
-
       "LambdaPermissionToSNS":{
             "Type" : "AWS::Lambda::Permission",
             "Properties" : {
                 "Action" : "lambda:InvokeFunction",
                 "FunctionName" : {"Fn::GetAtt" : ["LambdaFunction", "Arn"]},
-                "Principal" : "sns.amazonaws.com" 
+                "Principal" : "sns.amazonaws.com" ,
+                "SourceArn": {"Ref":"SNSTopic"}
               }
-         },
-         "LambdaCodeDeployApp":{
-            "Type" : "AWS::CodeDeploy::Application",
-            "Properties" : {
-            "ApplicationName" : "lambdaCodeDeploy",
-            "ComputePlatform" : "Lambda"
-            }
-
-         },
-
-            "LambdaDeploymentgroup":{
-               "Type" : "AWS::CodeDeploy::DeploymentGroup",
-               "Properties" : {
-                  "ApplicationName" : "lambdaCodeDeploy",
-                  "AutoRollbackConfiguration" : {
-                  "Enabled" : "true",
-                  "Events": ["DEPLOYMENT_FAILURE"]
-                  },
-                  "ServiceRoleArn": {
-                  "Fn::GetAtt": ["LambdaDeployServiceRole","Arn"]},
-                  "DeploymentGroupName" : {
-                  "Ref":"LambdaCodeDeployGroupName"
-                     }
-                  }
-            },
-            "LambdaDeployServiceRole":{
-                  "Type":"AWS::IAM::Role",
-                  "Properties":{
-                        "AssumeRolePolicyDocument":
-                     {"Version": "2012-10-17",
-                     "Statement": [
-                                 {
-                                 "Effect": "Allow",
-                                 "Principal": {
-                                 "Service": [
-                                       "codedeploy.amazonaws.com"
-                                       ]
-                                    },
-                                 "Action": ["sts:AssumeRole"]
-                                    }
-                                 ]
-                        },
-               "ManagedPolicyArns":["arn:aws:iam::aws:policy/service-role/AWSCodeDeployRoleForLambda"],
-               "Description":"Iam Role for lambda deployment",
-               "RoleName":"lambdaCodeDeployRole"
-               }
-            }        
+         }      
    },
     "Outputs":{
        "VPC":{
