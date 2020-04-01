@@ -1,142 +1,142 @@
 [
     {
     "ParameterKey": "VPCName",
-    "ParameterValue": "CloudFormationInfra"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "VPCCidrBlock",
-    "ParameterValue": "172.31.0.0/16"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "PubSubnetCidrBlock1",
-    "ParameterValue": "172.31.0.0/20"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "PubSubnetCidrBlock2",
-    "ParameterValue": "172.31.16.0/20"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "PubSubnetCidrBlock3",
-    "ParameterValue": "172.31.32.0/20"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "PubSubnetCidrBlock4",
-    "ParameterValue": "172.31.64.0/20"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "EC2InstanceVol",
-    "ParameterValue": "20"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "RDSInstanceVol",
-    "ParameterValue": "10"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "RDSPublicAccessibility",
-    "ParameterValue": "false"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "DBUsername",
-    "ParameterValue": "dbuser"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "DBPassword",
-    "ParameterValue": "Divinity0818"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "RDSDBName",
-    "ParameterValue": "csye6225"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "DBInstanceId",
-    "ParameterValue": "csye6225-spring2020"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "EC2IamRole",
-    "ParameterValue": "EC2-CSYE6225"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "EC2IamPolicy",
-    "ParameterValue": "webappS3"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "AMIImage",
-    "ParameterValue":"ami-04330ab3e550a42fa"
+    "ParameterValue":""
     },
     {
     "ParameterKey": "CDEC2ReadS3",
-    "ParameterValue": "CodeDeploy-EC2-S3"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "CCIUploadS3",
-    "ParameterValue": "CircleCI-Upload-To-S3"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "CCICodeDeploy",
-    "ParameterValue": "CircleCI-Code-Deploy"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "AWSAccountID",
-    "ParameterValue": "265833953798"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "CodeDeployBucket",
-    "ParameterValue": "codedeployprod.divyataneja.me"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "EC2CodeDeployRole",
-    "ParameterValue": "CodeDeployEC2ServiceRole"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "ServiceCodeDeployRole",
-    "ParameterValue": "CodeDeployServiceRole"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "CodeDeployAppName",
-    "ParameterValue": "csye6225-webapp"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "CodeDeployGroupName",
-    "ParameterValue": "csye6225-webapp-deployment"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "LaunchconfigName",
-    "ParameterValue": "asg_launch_config"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "HostedZoneIdR53",
-    "ParameterValue": "Z10KDN7VAPH9TX"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "FinalDNSName",
-    "ParameterValue": "prod.divyataneja.me"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "SNSTopicName",
-    "ParameterValue": "BillRequest"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "SQSQueueName",
-    "ParameterValue": "BillQueue"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "LambdaFunctionZip",
-    "ParameterValue": "lambdaFunction.zip"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "LambdaFunctionName",
-    "ParameterValue": "HandleUserBillRequests"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "DDTableName",
-    "ParameterValue": "UserBillsDue"
+    "ParameterValue": ""
     },
     { 
     "ParameterKey": "LambdaRole",
-    "ParameterValue": "LambdaExecutionRole"
+    "ParameterValue": ""
     },
     {
     "ParameterKey": "SourceEmail",
-    "ParameterValue": "noreply@prod.divyataneja.me"
+    "ParameterValue": ""
     }
     ]
