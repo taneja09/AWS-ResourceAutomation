@@ -111,6 +111,9 @@
       },
       "SourceEmail":{
          "Type":"String"
+      },
+      "SSLCertificateArn":{
+         "Type":"String"
       }
     },
     "Resources":{
@@ -480,8 +483,9 @@
              },
              "DBSubnetGroupName":{
                 "Ref":"DBSubnetGroup"
-             }
-          }
+             },
+             "StorageEncrypted": "true"
+         }
        },
     "CCIUploadToS3Policy":{
       "Type":"AWS::IAM::ManagedPolicy",
@@ -920,8 +924,12 @@
                "Type" : "forward"
              }],
              "LoadBalancerArn" : {"Fn::Join":["",["arn:aws:elasticloadbalancing:",{"Ref":"AWS::Region"},":",{"Ref":"AWSAccountID"},":loadbalancer/",{"Fn::GetAtt" : ["LoadBalancer", "LoadBalancerFullName"]}]]},
-             "Port" : "80",
-             "Protocol" : "HTTP"
+             "Port" : "443",
+             "Protocol" : "HTTPS",
+             "SslPolicy" : "ELBSecurityPolicy-2016-08",
+             "Certificates":[{"CertificateArn":{
+                "Ref":"SSLCertificateArn"
+             }}]
            }
        },
        "Route53DNS":{
