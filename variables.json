@@ -131,12 +131,16 @@
     "ParameterKey": "DDTableName",
     "ParameterValue": ""
     },
-    { 
+    {
     "ParameterKey": "LambdaRole",
     "ParameterValue": ""
     },
     {
     "ParameterKey": "SourceEmail",
+    "ParameterValue": ""
+    },
+    {
+    "ParameterKey": "SSLCertificateArn",
     "ParameterValue": ""
     }
     ]

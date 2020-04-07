@@ -41,3 +41,7 @@ The following shell script will validate if the provided stack name exist in the
 parameters to be passed - Stackname and Region
 
 run the following command on your terminal - `./delete.sh`
+
+**Command to import the SSL certificate for LoadBalancers**
+`aws acm import-certificate --certificate fileb://prod_divyataneja_me.crt --private-key fileb://mykey.key \`
+`--certificate-chain fileb://prod_divyataneja_me.ca-bundle`
