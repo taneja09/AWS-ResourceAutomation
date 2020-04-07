@@ -484,8 +484,20 @@
              "DBSubnetGroupName":{
                 "Ref":"DBSubnetGroup"
              },
-             "StorageEncrypted": "true"
+             "StorageEncrypted": "true",
+             "DBParameterGroupName":{
+                "Ref":"paramsrds"
+             }
+
          }
+       },
+       "paramsrds":{
+            "Type" : "AWS::RDS::DBParameterGroup",
+            "Properties" : {
+                "Description" : "perschema",
+                "Family" : "mysql8.0",
+                "Parameters" : {"performance_schema" : "1"}
+              }
        },
     "CCIUploadToS3Policy":{
       "Type":"AWS::IAM::ManagedPolicy",
